@@ -1,5 +1,7 @@
-import { TableNames } from "../TableNames";
 import { Knex } from "../connection";
+import { IImage } from "./ImageProvider";
+import { TableNames } from "../TableNames";
+
 
 export interface IProduct {
   id: number;
@@ -8,6 +10,8 @@ export interface IProduct {
   discount: string;
   category?: string;
   description?: string;
+  images: IImage[];
+
 }
 
 const getAll = async (): Promise<string | IProduct[]> => {
@@ -60,8 +64,18 @@ const updateById = async (id: number, productToUpdate: IProduct): Promise<string
 
 const deleteById = async (id: number): Promise<string | void> => {
   try {
+
+    await Knex
+    .delete(TableNames.image)
+    .innerJoin(
+      `${TableNames.productImage}`,
+      `${TableNames.productImage}.imageId`,
+      `${TableNames.image}.id`
+    )
+    .where(`${TableNames.productImage}.productId`, '=', id);
+
     await Knex(TableNames.product)
-      .select<IProduct[]>('*')
+      .delete('*')
       .where({ id });
   } catch (error) {
     return 'Erro ao consultar o produto na base';
