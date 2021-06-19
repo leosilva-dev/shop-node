@@ -1,3 +1,6 @@
 export enum TableNames {
-    user = 'user'
+    user = 'user',
+    image = 'image',
+    product = 'product',
+    productImage = 'productImage',
 }
