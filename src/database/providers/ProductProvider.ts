@@ -74,8 +74,8 @@ const deleteById = async (id: number): Promise<string | void> => {
     )
     .where(`${TableNames.productImage}.productId`, '=', id);
 
-    await Knex(TableNames.product)
-      .delete('*')
+    await Knex
+      .delete(TableNames.product)
       .where({ id });
   } catch (error) {
     return 'Erro ao consultar o produto na base';

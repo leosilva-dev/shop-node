@@ -59,7 +59,7 @@ const updateById = async (id: number, imageToUpdate: IImage): Promise<string | I
 const deleteById = async (id: number): Promise<string | void> => {
   try {
     await Knex(TableNames.image)
-      .select<IImage[]>('*')
+      .delete(TableNames.image)
       .where({ id });
   } catch (error) {
     return 'Erro ao consultar a imagem na base';
