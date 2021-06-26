@@ -11,5 +11,6 @@ routes.post('/sign-in', SignInController.validateSingIn, SignInController.signIn
 
 // Products CRUD    
 routes.get('/products', ProductController.validateGetAll, ProductController.getAll);
+routes.post('/products', ProductController.validateCreate, ProductController.create);
 
 export { routes };
