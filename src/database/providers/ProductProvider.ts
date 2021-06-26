@@ -14,9 +14,13 @@ export interface IProduct {
 
 }
 
-const getAll = async (): Promise<string | IProduct[]> => {
+const getAll = async (page: number = 0, limit: number = 10, search: string = ''): Promise<string | IProduct[]> => {
   try {
-    const products = await Knex(TableNames.product).select<IProduct[]>('*');
+    const products = await Knex(TableNames.product)
+    .select<IProduct[]>('*')
+    .where('description','like', `%${search}%` )
+    .offset((page - 1)*limit)
+    .limit(limit);
     return products;
   } catch (error) {
     return 'Erro ao consultar os produtos na base';
@@ -82,10 +86,20 @@ const deleteById = async (id: number): Promise<string | void> => {
   }
 }
 
+const count = async () =>{
+  try {
+    const [{count}] = await Knex(TableNames.product).count('* as count');
+    return Number(count);
+  }catch (error) {
+    return 'Erro ao acessar a base'
+  }
+}
+
 export const ProductProvider = {
   getAll,
   create,
   getById,
   updateById,
   deleteById,
+  count
 }
